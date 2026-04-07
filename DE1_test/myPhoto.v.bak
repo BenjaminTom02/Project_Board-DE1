@@ -1,0 +1,71 @@
+module myPhoto (CA, OU, FL, TH, SY, TA, NO, SE, IN, LO);
+    input SY, TA, NO, SE, IN, LO;
+    output CA, OU, FL, TH;
+    
+    parameter delay = 10; // Độ trễ đo được từ Phần 2 
+
+    // CAPTURE logic [cite: 42, 43]
+    wire term1, term2;
+    #delay and and_cap1 (term1, SY, TA, ~SE, LO, ~IN);
+    #delay and and_cap2 (term2, SY, TA, SE, NO, ~LO, ~IN);
+    #delay nor nor_cap1 (CA, term1, term2); // Active low output 
+
+    // OUT OF FOCUS logic [cite: 44]
+    #delay nand nand_focus (OU, SY, IN, TA); // Active low output 
+
+    // FLASH logic [cite: 45, 46]
+    wire term_fls1, term_fls2, term_fls3;
+    #delay and and_fls1 (term_fls1, SY, TA, SE, ~NO, ~IN);
+    #delay and and_fls2 (term_fls2, SY, TA, ~LO, ~NO, ~IN);
+    #delay or or_fls1 (term_fls3, term_fls1, term_fls2);
+    #delay not not_fls (FL, term_fls3); // Active low output 
+
+    // THERMONUCLEAR DEVICE logic [cite: 47]
+    wire term_TH;
+    #delay and and_ther (term_TH, SY, NO, TA, SE);
+    #delay not not_ther (TH, term_TH); // Active low output 
+
+endmodule
+
+module TestBench;
+
+  // inputs
+  reg SY, TA, NO, SE, IN, LO;
+
+  // outputs
+  wire CA, OU, FL, TH;
+
+  // delay giữa các test
+  parameter stimDelay = 15;
+
+  // biến đếm
+  integer i;
+
+  // gọi module cần test
+  myPhoto uut (
+    .CA(CA),
+    .OU(OU),
+    .FL(FL),
+    .TH(TH),
+    .SY(SY),
+    .TA(TA),
+    .NO(NO),
+    .SE(SE),
+    .IN(IN),
+    .LO(LO)
+  );
+
+  // chạy test 64 trường hợp
+  initial begin
+
+    {SY, TA, NO, SE, IN, LO} = 0;
+
+    for (i = 0; i < 64; i = i + 1) begin
+      {SY, TA, NO, SE, IN, LO} = i;
+      #stimDelay;
+    end
+
+    $stop;
+  end
+
+endmodule

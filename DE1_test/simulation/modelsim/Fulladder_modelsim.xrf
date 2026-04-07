@@ -1,0 +1,13 @@
+vendor_name = ModelSim
+source_file = 1, E:/QUARTUS/btvn/Fulladder.v
+source_file = 1, E:/QUARTUS/Waveform2.vwf
+source_file = 1, E:/QUARTUS/btvn/db/Fulladder.cbx.xml
+design_name = Fulladder
+instance = comp, \sum~output , sum~output, Fulladder, 1
+instance = comp, \cout~output , cout~output, Fulladder, 1
+instance = comp, \cin~input , cin~input, Fulladder, 1
+instance = comp, \a~input , a~input, Fulladder, 1
+instance = comp, \b~input , b~input, Fulladder, 1
+instance = comp, \sum~0 , sum~0, Fulladder, 1
+instance = comp, \cout~0 , cout~0, Fulladder, 1
+instance = comp, \~QUARTUS_CREATED_GND~I , ~QUARTUS_CREATED_GND~I, Fulladder, 1

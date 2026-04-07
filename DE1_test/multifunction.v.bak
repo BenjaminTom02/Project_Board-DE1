@@ -1,0 +1,54 @@
+module multifunction(res, s1, s2, a, b);
+	output res;
+	input s1, s2, a, b;
+	not inv1 (nots1, s1);
+	not inv2 (nots2, s2);
+	and and0 (term0, a, b);
+	xor xor1 (term2, a, b);
+	or or1 (term1, a, b);
+	and and1 (term3, nots1, nots2, term0);
+	and and2 (term4, nots1, s2, term1);
+	and and3 (term5, s1, nots2, term2);
+	or o2 (res, term3, term4, term5);
+endmodule
+
+module test_module (res, s1, s2, a, b);
+	input res;
+	output s1, s2, a, b;
+	parameter stim_delay = 15;
+	reg s1, s2, a, b;
+	initial 
+	begin
+		s1 = 0;
+		s2 = 0;
+		a = 0;
+		b = 0;
+	end
+	
+	initial 
+	begin
+	#stim_delay (s1, s2, a, b) = 0;
+	#stim_delay (s1, s2, a, b) = 1;
+	#stim_delay (s1, s2, a, b) = 2;
+	#stim_delay (s1, s2, a, b) = 3;
+	#stim_delay (s1, s2, a, b) = 4;
+	#stim_delay (s1, s2, a, b) = 5;
+	#stim_delay (s1, s2, a, b) = 6;
+	#stim_delay (s1, s2, a, b) = 7;
+	#stim_delay (s1, s2, a, b) = 8;
+	#stim_delay (s1, s2, a, b) = 9;
+	#stim_delay (s1, s2, a, b) = 10;
+	#stim_delay (s1, s2, a, b) = 11;
+	#stim_delay (s1, s2, a, b) = 12;
+	#stim_delay (s1, s2, a, b) = 13;
+	#stim_delay (s1, s2, a, b) = 14;
+	#stim_delay (s1, s2, a, b) = 15;
+	end
+endmodule
+
+module test_bench;
+	wire res, a, b, s1, s2;
+	multifunction multif(res, s1, s2, a, b);
+	test_module tester(res, s1, s2, a, b);
+endmodule
+	

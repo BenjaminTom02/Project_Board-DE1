@@ -1,0 +1,33 @@
+module Fulladder (
+    input  wire clk,      // Xung đồng hồ
+    input  wire reset,    // Tín hiệu reset hệ thống
+    input  wire a,        // Đầu vào A
+    input  wire b,        // Đầu vào B
+    input  wire cin,      // Số dư đầu vào (Carry-in)
+    output reg  sum,      // Tổng đầu ra (đã qua thanh ghi)
+    output reg  cout
+);
+
+// Tín hiệu tạm thời cho phần logic tổ hợp
+    wire w_sum;
+    wire w_cout;
+
+    // 1. Logic tổ hợp (Combinational Logic)
+    assign w_sum  = a ^ b ^ cin;
+    assign w_cout = (a & b) | (cin & (a ^ b));
+
+    // 2. Logic tuần tự (Sequential Logic)
+    // Cập nhật giá trị vào thanh ghi tại mỗi cạnh lên của Clock
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // Reset không đồng bộ: đưa đầu ra về 0
+            sum  <= 1'b0;
+            cout <= 1'b0;
+        end else begin
+            // Nạp giá trị tính toán được vào thanh ghi
+            sum  <= w_sum;
+            cout <= w_cout;
+        end
+    end
+
+endmodule
